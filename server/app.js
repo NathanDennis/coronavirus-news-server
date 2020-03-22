@@ -11,12 +11,6 @@ const PORT = process.env.PORT || 3000
 const cron = require('node-cron')
 const fetch = require('node-fetch')
 
-const today = new Date().toJSON().slice(0,10)
-const url = `https://newsapi.org/v2/everything?q=coronavirus&from=${today}&pageSize=50&sortBy=popularity&apiKey=${APIKEY}`
-
-
-let articleData = ''
-
 const getAPIData = async (apiURL) => {
     const response = await fetch(apiURL, {
         method: 'GET',
@@ -25,20 +19,41 @@ const getAPIData = async (apiURL) => {
     return await response.json()
 }
 
-getAPIData(url).then((data) => {
-    articleData.length = 0
-    articleData = data.articles
+// USA DATA
+const today = new Date().toJSON().slice(0,10)
+let UnitedStatesArticleData = ''
+const UnitedStatesURL = `https://newsapi.org/v2/everything?q=coronavirus&from=${today}&pageSize=50&sortBy=popularity&apiKey=${APIKEY}`
+
+getAPIData(UnitedStatesURL).then((data) => {
+    UnitedStatesArticleData.length = 0
+    UnitedStatesArticleData = data.articles
 }).catch(error => console.log(error))
 
 cron.schedule('* 0 * * * *', () => {
-    getAPIData().then((data) => {
-        articleData.length = 0
-        articleData = data
+    getAPIData(UnitedStatesURL).then((data) => {
+        UnitedStatesArticleData.length = 0
+        UnitedStatesArticleData = data
     })
 })
 
+// UNITED KINGDOM DATA
+let UKArticleData = ''
+const GreatBritainURL = `http://newsapi.org/v2/top-headlines?q=coronavirus&country=gb&apiKey=${APIKEY}`
+getAPIData(GreatBritainURL).then((data) => {
+    UKArticleData.length = 0
+    UKArticleData = data.articles
+}).catch(error => console.log(error))
+
+cron.schedule('* 1 * * * *', () => {
+    getAPIData(GreatBritainURL).then((data) => {
+        UKArticleData.length = 0
+        UKArticleData = data
+    })
+})
+
+
 app.get('/', (req, res)=> {
-    res.send(articleData)
+    res.send({UnitedStatesArticleData, UKArticleData})
 })
 
 app.listen(PORT, () => {
