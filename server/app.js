@@ -12,7 +12,7 @@ const cron = require('node-cron')
 const fetch = require('node-fetch')
 
 const today = new Date().toJSON().slice(0,10)
-const url = `https://newsapi.org/v2/everything?q=coronavirus&from=${today}&sortBy=popularity&apiKey=${APIKEY}`
+const url = `https://newsapi.org/v2/everything?q=coronavirus&from=${today}&pageSize=50&sortBy=popularity&apiKey=${APIKEY}`
 
 
 let articleData = ''
