@@ -3,7 +3,8 @@ const app = express()
 
 const dotenv = require('dotenv')
 dotenv.config()
-const { APIKEY, PORT } = process.env
+const { APIKEY } = process.env
+const PORT = process.env.PORT || 3000
 
 const cron = require('node-cron')
 const fetch = require('node-fetch')
