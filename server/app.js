@@ -25,12 +25,6 @@ const getAPIData = async (apiURL) => {
     return await response.json()
 }
 
-// app.use((req, res, next) => {
-//     res.header('Access-Control-Allow-Origin', 'https://coronavirusupdates.herokuapp.com/')
-//     res.header('Access-Control-Allow-Headers', "Origin, X-Requested-With, Content-Type, Accept")
-//     next()
-// })
-
 getAPIData(url).then((data) => {
     articleData.length = 0
     articleData = data.articles
