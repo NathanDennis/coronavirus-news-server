@@ -1,5 +1,7 @@
 const express = require('express')
 const app = express()
+const cors = require('cors')
+app.use(cors())
 
 const dotenv = require('dotenv')
 dotenv.config()
@@ -23,11 +25,11 @@ const getAPIData = async (apiURL) => {
     return await response.json()
 }
 
-app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', 'https://coronavirusupdates.herokuapp.com/')
-    res.header('Access-Control-Allow-Headers', "Origin, X-Requested-With, Content-Type, Accept")
-    next()
-})
+// app.use((req, res, next) => {
+//     res.header('Access-Control-Allow-Origin', 'https://coronavirusupdates.herokuapp.com/')
+//     res.header('Access-Control-Allow-Headers', "Origin, X-Requested-With, Content-Type, Accept")
+//     next()
+// })
 
 getAPIData(url).then((data) => {
     articleData.length = 0
