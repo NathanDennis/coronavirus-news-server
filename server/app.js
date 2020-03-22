@@ -20,9 +20,8 @@ const getAPIData = async (apiURL) => {
 }
 
 // USA DATA
-const today = new Date().toJSON().slice(0,10)
 let UnitedStatesArticleData = ''
-const UnitedStatesURL = `https://newsapi.org/v2/everything?q=coronavirus&from=${today}&pageSize=50&sortBy=popularity&apiKey=${APIKEY}`
+const UnitedStatesURL = `http://newsapi.org/v2/top-headlines?q=coronavirus&country=us&apiKey=${APIKEY}`
 
 getAPIData(UnitedStatesURL).then((data) => {
     UnitedStatesArticleData.length = 0
