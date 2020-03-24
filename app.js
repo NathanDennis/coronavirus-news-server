@@ -9,32 +9,53 @@ const { APIKEY } = process.env
 const PORT = process.env.PORT || 3000
 
 const cron = require('node-cron')
-const loadArrayData = require('./src/functions/loadArrayData')
+const getAPIData = require('./src/functions/getAPIData')
 
 // #### LOAD INITIAL DATA #####
 // USA DATA
 let UnitedStatesArticleData = ''
 const UnitedStatesURL = `http://newsapi.org/v2/top-headlines?q=coronavirus&country=us&apiKey=${APIKEY}`
 
-loadArrayData(UnitedStatesURL, UnitedStatesArticleData)
+getAPIData(UnitedStatesURL)
+    .then((data) => {
+        UnitedStatesArticleData.length = 0
+        UnitedStatesArticleData = data.articles
+        console.log('Initial USA data loaded')
+    })
+    .catch(error => console.log(error))
 
 // UNITED KINGDOM DATA
 let UKArticleData = ''
 const GreatBritainURL = `http://newsapi.org/v2/top-headlines?q=coronavirus&country=gb&apiKey=${APIKEY}`
 
-loadArrayData(GreatBritainURL, UKArticleData)
+getAPIData(GreatBritainURL)
+    .then((data) => {
+        UKArticleData.length = 0
+        UKArticleData = data.articles
+        console.log('Initial UK data loaded')
+    })
+    .catch(error => console.log(error))
+
 
 // ##### LOAD UPDATED DATA #####
 // Schedule API call and data refresh at the top of each hour
 cron.schedule('0 0 */1 * * * *', () => {
-    loadArrayData(UnitedStatesArticleData, UnitedStatesURL)
-    .then(console.log('Scheduled UnitedStatesArticles array updated'))
+    getAPIData(UnitedStatesURL)
+    .then((data) => {
+        UnitedStatesArticleData.length = 0
+        UnitedStatesArticleData = data.articles
+        console.log('Scheduled USA data loaded')
+    })
     .catch(error => console.log(error))
 })
 
 cron.schedule('00 00 */1 * * * *', () => {
-    loadArrayData(UKArticleData, GreatBritainURL)
-    .then(console.log('Scheduled UK articles array updated'))
+    getAPIData(GreatBritainURL)
+    .then((data) => {
+        UKArticleData.length = 0
+        UKArticleData = data.articles
+        console.log('Scheduled UK data loaded')
+    })
     .catch(error => console.log(error))
 })
 
