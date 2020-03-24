@@ -41,7 +41,7 @@ getAPIData(UnitedStatesURL)
 }).catch(error => console.log(error))
 
 // Schedule API call and data refresh every 59th minute of each hour
-cron.schedule('*/0 * * * *', () => {
+cron.schedule('0 /0 * * * *', () => {
     getAPIData(UnitedStatesURL)
     .then((data) => {
         UnitedStatesArticleData.length = 0
